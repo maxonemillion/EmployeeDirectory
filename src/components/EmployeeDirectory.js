@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import API from "../utils/API";
 import { Table, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"
+import "../components/EmployeeDirectory.css"
 
 const Directory = () => {
     const [employees, setEmployees] = useState([]);
+    const [search, setSearch] = useState([]);
 
     useEffect(() => {
         loadEmployees();
     }, []);
+
 
     const loadEmployees = () => {
 
@@ -16,43 +19,69 @@ const Directory = () => {
             .then(res => {
                 console.log(res);
                 setEmployees(res.data.results)
+                setSearch(res.data.results)
             })
     }
 
-    const sortNames = () => {
-        console.log("test")
+    const sortFirstNames = () => {
         var newEmployees = [...employees];
-        newEmployees = newEmployees.sort()
-        setEmployees(newEmployees);
+        newEmployees = newEmployees.sort((a, b) => {
+            if (a.name.first < b.name.first) {
+                return -1;
+            }
+            if (a.name.first > b.name.first) {
+                return 1;
+            }
+            return 0;
+        });
+        setSearch(newEmployees);
     }
 
-    const filterEmployees = (event) => {
+    const sortLastNames = () => {
         var newEmployees = [...employees];
-        newEmployees = newEmployees.filter()
-        setEmployees(newEmployees);
+        newEmployees = newEmployees.sort((a, b) => {
+            if (a.name.last < b.name.last) {
+                return -1;
+            }
+            if (a.name.last > b.name.last) {
+                return 1;
+            }
+            return 0;
+        });
+        setSearch(newEmployees);
+    }
+
+
+    const filterEmployees = (event) => {
+        console.log(event)
+        var newList = employees.filter(employee => {
+            return employee.name.first.toLowerCase().includes(event) || employee.name.last.toLowerCase().includes(event)
+        });
+        setSearch(newList);
     }
 
     // 
 
-    const generateList = (employees) => {
+    const generateList = () => {
         return (
             <div>
                 <input
                     placeholder="Find employee"
-                    onChange={filterEmployees}
+                    onChange={(event) => filterEmployees(event.target.value) }
                 ></input>
                 <br></br>
-                <Table striped bordered hover variant="dark">
+                <br></br>
+                <Table striped bordered hover variant="light" className="list">
                     <thead>
                         <tr>
 
                             <th>First Name
-                             
-                            <Button variant="light" size="sm" onClick={sortNames}>Sort</Button>
+
+                            <Button variant="light" size="sm" onClick={sortFirstNames}>A-Z</Button>
                             </th>
                             <br></br>
                             <th>Last Name
-                            <Button variant="light" size="sm" onClick={sortNames}>Sort</Button>
+                            <Button variant="light" size="sm" onClick={sortLastNames}>A-Z</Button>
                             </th>
                             <br></br>
                             <th>Email</th>
@@ -65,7 +94,7 @@ const Directory = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {employees.map(employee => {
+                        {search.map(employee => {
                             console.log(employee)
                             return (
                                 <tr>
@@ -91,26 +120,14 @@ const Directory = () => {
             </div>
         )
     }
-    
-    
 
-// const filter = (event) => {
-//     const query = event.target.value;
-//     sortEmployees({ query }, () => {
-
-//         if (sorted.length > 0) {
-//             list = 
-//         }
-//     })
-// }
-
-return (
-    <div>
-        <ul>
-            {generateList(employees)}
-        </ul>
-    </div>
-)
+    return (
+        <div>
+            <ul>
+                {generateList(employees)}
+            </ul>
+        </div>
+    )
 
 }
 
