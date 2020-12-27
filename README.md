@@ -19,7 +19,7 @@ The purpose of this assignment was to create an employee directory with React by
 ### SCREENSHOT:
 
 ### INFORMATION:
-[Here](https://maxonemillion.github.io/EmployeeDirectory) is the link to the deployed app.  [Here](https://github.com/maxonemillion/EmployeeDirectory "Link to github repository") is the Github repository for this project.
+[Here](https://maxonemillion.github.io/EmployeeDirectory) is the link to the deployed app. 
 
 ### CONTACT:
 * max.daniel@utah.edu
